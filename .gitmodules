@@ -1,6 +1,6 @@
-[submodule "sdat2img"]
-	path = sdat2img
-	url = git@github.com:xpirt/sdat2img.git
-[submodule "extract_android_ota_payload"]
-	path = extract_android_ota_payload
+[submodule "utils/extract_android_ota_payload"]
+	path = utils/extract_android_ota_payload
 	url = git@github.com:cyxx/extract_android_ota_payload.git
+[submodule "utils/sdat2img"]
+	path = utils/sdat2img
+	url = git@github.com:xpirt/sdat2img.git

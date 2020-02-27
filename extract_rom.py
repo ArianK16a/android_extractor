@@ -2,8 +2,8 @@ import os
 import sys
 import tempfile
 import zipfile
-from sdat2img import sdat2img
-from extract_android_ota_payload import extract_android_ota_payload
+from utils.sdat2img import sdat2img
+from utils.extract_android_ota_payload import extract_android_ota_payload
 
 ### start http://thesmithfam.org/blog/2012/10/25/temporarily-suppress-console-output-in-python/
 from contextlib import contextmanager
@@ -32,6 +32,9 @@ def extract(partitions):
             extract_android_ota_payload.main(f'{out}/payload.bin', f'{out}')
             sparse = False
         for partition in partitions:
+            if partition == "boot":
+                print("boot.img, starting now!")
+                return
             if f'{partition}.new.dat.br' in os.listdir(out):
                 print(f'Decompressing {partition}.new.dat.br')
                 print()
@@ -73,5 +76,5 @@ def extract(partitions):
                 print()
 
 
-partitions = ["system", "vendor"]
+partitions = ["system", "vendor", "boot"]
 extract(partitions)
