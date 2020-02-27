@@ -54,8 +54,7 @@ def extract(partitions):
                 try:
                     os.mkdir(f'{path}/{partition}')
                 except FileExistsError:
-                    with suppress_stdout():
-                        os.system(f'sudo umount {path}/{partition}')
+                    os.system(f'sudo umount {path}/{partition}')
                     os.rmdir(f'{path}/{partition}')
                     os.mkdir(f'{path}/{partition}')
 
@@ -63,7 +62,7 @@ def extract(partitions):
                 print(f'Mounted {partition} as {path}/{partition}.')
                 print()
             else:
-                with suppress_stdout():
+                if partition in os.listdir(path):
                     os.system(f'sudo umount {path}/{partition}')
                     os.rmdir(f'{path}/{partition}')
 
