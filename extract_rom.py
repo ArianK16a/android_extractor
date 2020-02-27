@@ -42,8 +42,13 @@ def extract(partitions):
                 shutil.rmtree(f'{path}/{partition}')
 
             if partition == "boot":
-                print("unpacking boot.img")
-                os.system(f'{path}/utils/split_boot {out}/{partition}.img')
+                if "boot.img" in os.listdir(out):
+                    print("unpacking boot.img")
+                    print()
+                    os.system(f'{path}/utils/split_boot {out}/{partition}.img')
+                else:
+                    print(f'Can not get {partition}.img out of {original_package}')
+                    print()
                 return
             if f'{partition}.new.dat.br' in os.listdir(out):
                 print(f'Decompressing {partition}.new.dat.br')
