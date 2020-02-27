@@ -33,7 +33,10 @@ def extract(partitions):
             sparse = False
         for partition in partitions:
             if partition == "boot":
-                print("boot.img, starting now!")
+                if partition in os.listdir(path):
+                    os.rmdir(f'{path}/{partition}')
+                print("unpacking boot.img")
+                os.system(f'{path}/utils/split_boot {out}/{partition}.img')
                 return
             if f'{partition}.new.dat.br' in os.listdir(out):
                 print(f'Decompressing {partition}.new.dat.br')
