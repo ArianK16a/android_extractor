@@ -1,0 +1,3 @@
+[submodule "sdat2img"]
+	path = sdat2img
+	url = git@github.com:xpirt/sdat2img.git
