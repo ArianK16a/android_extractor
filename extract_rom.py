@@ -1,4 +1,5 @@
 import os
+import pathlib
 import shutil
 import sys
 import tempfile
@@ -33,6 +34,9 @@ def extract(partitions):
         print(f'Unpacking {original_package} temporary.')
         print()
         package.extractall(out)
+        for i in pathlib.Path(out).rglob('*.zip'):
+            print(f'Unpacking {i} temporary.')
+            zipfile.ZipFile(i).extractall(out)
         if "payload.bin" in os.listdir(out):
             extract_android_ota_payload.main(f'{out}/payload.bin', f'{out}')
             sparse = False
