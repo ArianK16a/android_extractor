@@ -67,6 +67,10 @@ def extract(partitions):
                 os.system(f'sudo mount -t ext4 -o loop {out}/{img} {path}/{partition}')
                 print(f'Mounted {partition} as {path}/{partition}.')
                 print()
+                print(f'Fixing file permissions of {path}/{partition}')
+                os.system(f'bash {path}/utils/permissions.sh {path}/{partition}')
+                print("Fixed file permissions.")
+                print()
             else:
                 print(f'Can not get {partition}.img out of {original_package}')
                 print()
