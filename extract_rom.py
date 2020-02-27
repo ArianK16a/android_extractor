@@ -43,16 +43,16 @@ def extract(partitions):
                     sdat2img.main(f'{out}/{partition}.transfer.list', f'{out}/{partition}.new.dat', f'{out}/{partition}.img')
 
                 os.listdir(out)
-
             if f'{partition}.img' in os.listdir(out):
                 print(f'Decompressing sparse image {partition}')
+                print()
                 simg = os.system(f'simg2img {out}/{partition}.img {out}/raw.{partition}.img')
                 if int(simg) == 0:
                     img = f'raw.{partition}.img'
                 else:
                     img = f'{partition}.img'
                     print(f'{partition}.img is not a sparse image, proceeding.')
-
+                    print()
                 try:
                     os.mkdir(f'{path}/{partition}')
                 except FileExistsError:
@@ -60,14 +60,15 @@ def extract(partitions):
                         os.system(f'sudo umount {path}/{partition}')
                     os.rmdir(f'{path}/{partition}')
                     os.mkdir(f'{path}/{partition}')
-
                 os.system(f'sudo mount -t ext4 -o loop {out}/{img} {path}/{partition}')
                 print(f'Mounted {partition}.')
+                print()
             else:
                 with suppress_stdout():
                     os.system(f'sudo umount {path}/{partition}')
                     os.rmdir(f'{path}/{partition}')
                 print(f'Can not get {partition}.img out of {original_package}')
+                print()
 
 
 partitions = ["system", "vendor"]
