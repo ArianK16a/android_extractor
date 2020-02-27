@@ -22,6 +22,7 @@ def suppress_stdout():
 def extract(partitions):
     path = os.getcwd()
     original_package = os.path.abspath(str(sys.argv[1]))
+    sparse = True
 
     with tempfile.TemporaryDirectory() as out, zipfile.ZipFile(original_package, 'r') as package:
         print(f'Unpacking {original_package} temporary.')
@@ -29,7 +30,7 @@ def extract(partitions):
         package.extractall(out)
         if "payload.bin" in os.listdir(out):
             extract_android_ota_payload.main(f'{out}/payload.bin', f'{out}')
-            skip_sparse = True
+            sparse = False
         for partition in partitions:
             if f'{partition}.new.dat.br' in os.listdir(out):
                 print(f'Decompressing {partition}.new.dat.br')
@@ -42,18 +43,16 @@ def extract(partitions):
                 with suppress_stdout():
                     sdat2img.main(f'{out}/{partition}.transfer.list', f'{out}/{partition}.new.dat', f'{out}/{partition}.img')
 
-                skip_sparse = True
+                sparse = False
 
             if f'{partition}.img' in os.listdir(out):
                 img = f'{partition}.img'
-                if not skip_sparse:
+                if sparse:
                     print(f'Decompressing sparse image {partition}.img')
                     print()
                     simg = os.system(f'simg2img {out}/{partition}.img {out}/raw.{partition}.img')
                     if int(simg) == 0:
                         img = f'raw.{partition}.img'
-                    print(f'{partition}.img is not a sparse image, proceeding.')
-                    print()
 
                 try:
                     os.mkdir(f'{path}/{partition}')
