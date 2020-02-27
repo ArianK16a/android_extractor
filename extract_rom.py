@@ -1,4 +1,5 @@
 import os
+import shutil
 import sys
 import tempfile
 import zipfile
@@ -32,9 +33,11 @@ def extract(partitions):
             extract_android_ota_payload.main(f'{out}/payload.bin', f'{out}')
             sparse = False
         for partition in partitions:
+            if partition in os.listdir(path):
+                os.system(f'sudo umount {path}/{partition}')
+                shutil.rmtree(f'{path}/{partition}')
+
             if partition == "boot":
-                if partition in os.listdir(path):
-                    os.rmdir(f'{path}/{partition}')
                 print("unpacking boot.img")
                 os.system(f'{path}/utils/split_boot {out}/{partition}.img')
                 return
@@ -60,21 +63,11 @@ def extract(partitions):
                     if int(simg) == 0:
                         img = f'raw.{partition}.img'
 
-                try:
-                    os.mkdir(f'{path}/{partition}')
-                except FileExistsError:
-                    os.system(f'sudo umount {path}/{partition}')
-                    os.rmdir(f'{path}/{partition}')
-                    os.mkdir(f'{path}/{partition}')
-
+                os.mkdir(f'{path}/{partition}')
                 os.system(f'sudo mount -t ext4 -o loop {out}/{img} {path}/{partition}')
                 print(f'Mounted {partition} as {path}/{partition}.')
                 print()
             else:
-                if partition in os.listdir(path):
-                    os.system(f'sudo umount {path}/{partition}')
-                    os.rmdir(f'{path}/{partition}')
-
                 print(f'Can not get {partition}.img out of {original_package}')
                 print()
 
