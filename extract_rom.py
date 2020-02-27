@@ -22,13 +22,8 @@ def extract(partitions):
     path = os.getcwd()
     original_package = os.path.abspath(str(sys.argv[1]))
 
-    print(f'Current working directory: {path}')
-    print()
-    print(f'File to extract: {original_package}')
-    print()
-
     with tempfile.TemporaryDirectory() as out, zipfile.ZipFile(original_package, 'r') as package:
-        print(f'Out folder: {out}')
+        print(f'Unpacking {original_package} temporary.')
         print()
         package.extractall(out)
         for partition in partitions:
@@ -36,6 +31,7 @@ def extract(partitions):
                 print(f'Decompressing {partition}.new.dat.br')
                 print()
                 os.system(f'brotli -d {out}/{partition}.new.dat.br -o {out}/{partition}.new.dat')
+
             if f'{partition}.new.dat' in os.listdir(out):
                 print(f'Decompressing {partition}.new.dat')
                 print()
@@ -43,8 +39,9 @@ def extract(partitions):
                     sdat2img.main(f'{out}/{partition}.transfer.list', f'{out}/{partition}.new.dat', f'{out}/{partition}.img')
 
                 os.listdir(out)
+
             if f'{partition}.img' in os.listdir(out):
-                print(f'Decompressing sparse image {partition}')
+                print(f'Decompressing sparse image {partition}.img')
                 print()
                 simg = os.system(f'simg2img {out}/{partition}.img {out}/raw.{partition}.img')
                 if int(simg) == 0:
@@ -53,6 +50,7 @@ def extract(partitions):
                     img = f'{partition}.img'
                     print(f'{partition}.img is not a sparse image, proceeding.')
                     print()
+
                 try:
                     os.mkdir(f'{path}/{partition}')
                 except FileExistsError:
@@ -60,13 +58,15 @@ def extract(partitions):
                         os.system(f'sudo umount {path}/{partition}')
                     os.rmdir(f'{path}/{partition}')
                     os.mkdir(f'{path}/{partition}')
+
                 os.system(f'sudo mount -t ext4 -o loop {out}/{img} {path}/{partition}')
-                print(f'Mounted {partition}.')
+                print(f'Mounted {partition} as {path}/{partition}.')
                 print()
             else:
                 with suppress_stdout():
                     os.system(f'sudo umount {path}/{partition}')
                     os.rmdir(f'{path}/{partition}')
+
                 print(f'Can not get {partition}.img out of {original_package}')
                 print()
 
