@@ -42,14 +42,13 @@ def extract(partitions):
             sparse = False
         for partition in partitions:
             if partition in os.listdir(path):
-                os.system(f'sudo umount {path}/{partition}')
                 shutil.rmtree(f'{path}/{partition}')
 
             if partition == "boot":
                 if "boot.img" in os.listdir(out):
                     print("unpacking boot.img")
                     print()
-                    os.system(f'{path}/utils/split_boot {out}/{partition}.img')
+                    os.system(f'{os.path.dirname(os.path.realpath(__file__))}/utils/split_boot {out}/{partition}.img')
                 else:
                     print(f'Can not get {partition}.img out of {original_package}')
                     print()
@@ -77,16 +76,13 @@ def extract(partitions):
                         img = f'raw.{partition}.img'
 
                 os.mkdir(f'{path}/{partition}')
-                os.system(f'sudo mount -t ext4 -o loop {out}/{img} {path}/{partition}')
-                print(f'Mounted {partition} as {path}/{partition}.')
-                print()
-                print(f'Fixing file permissions of {path}/{partition}')
-                os.system(f'bash {path}/utils/permissions.sh {path}/{partition}')
-                print("Fixed file permissions.")
+                os.system(f'7z x {out}/{img} -o{path}/{partition}')
+                print(f'Extracted {partition} to {path}/{partition}.')
                 print()
             else:
                 print(f'Can not get {partition}.img out of {original_package}')
                 print()
+
 
 
 partitions = ["system", "vendor", "boot"]
