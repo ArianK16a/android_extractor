@@ -21,6 +21,10 @@ def suppress_stdout():
 ### end http://thesmithfam.org/blog/2012/10/25/temporarily-suppress-console-output-in-python/
 
 def extract(partitions):
+    if len(sys.argv) == 1:
+        print("Usage: python3 extract_rom.py path/to/rom.zip")
+        exit(1)
+
     path = os.getcwd()
     original_package = os.path.abspath(str(sys.argv[1]))
     sparse = True
