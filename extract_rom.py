@@ -1,8 +1,9 @@
 import os
 import sys
-import zipfile
 import tempfile
+import zipfile
 from sdat2img import sdat2img
+from extract_android_ota_payload import extract_android_ota_payload
 
 ### start http://thesmithfam.org/blog/2012/10/25/temporarily-suppress-console-output-in-python/
 from contextlib import contextmanager
@@ -26,6 +27,8 @@ def extract(partitions):
         print(f'Unpacking {original_package} temporary.')
         print()
         package.extractall(out)
+        if "payload.bin" in os.listdir(out):
+            extract_android_ota_payload.main(f'{out}/payload.bin', f'{out}')
         for partition in partitions:
             if f'{partition}.new.dat.br' in os.listdir(out):
                 print(f'Decompressing {partition}.new.dat.br')
