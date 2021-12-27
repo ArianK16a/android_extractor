@@ -25,16 +25,8 @@ def extract(partitions):
     if len(sys.argv) == 1:
         print("Usage: python3 extract_rom.py path/to/rom.zip")
         exit(1)
-    elif len(sys.argv) == 3:
-        path = os.path.abspath(str(sys.argv[2]))
-        if not os.path.isdir(path):
-            os.mkdir(path)
-    else:
-        path = os.getcwd()
 
-    print(f'Out is: {path}')
-    print()
-
+    path = os.getcwd()
     original_package = os.path.abspath(str(sys.argv[1]))
     sparse = True
 
@@ -57,7 +49,6 @@ def extract(partitions):
                     print("unpacking boot.img")
                     print()
                     os.system(f'{os.path.dirname(os.path.realpath(__file__))}/utils/split_boot {out}/{partition}.img')
-                    shutil.move(f'{os.path.dirname(os.path.realpath(__file__))}/boot', path)
                 else:
                     print(f'Can not get {partition}.img out of {original_package}')
                     print()
