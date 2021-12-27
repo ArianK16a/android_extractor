@@ -85,5 +85,5 @@ def extract(partitions):
 
 
 
-partitions = ["system", "vendor", "boot"]
+partitions = ["odm", "product", "system", "system_ext", "vendor", "boot"]
 extract(partitions)
