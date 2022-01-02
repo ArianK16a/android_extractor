@@ -76,7 +76,20 @@ def extract(partitions):
                         img = f'raw.{partition}.img'
 
                 os.mkdir(f'{path}/{partition}')
-                os.system(f'7z x {out}/{img} -o{path}/{partition}')
+                if os.system(f'7z x {out}/{img} -o{path}/{partition} > /dev/null') != 0:
+                    print(f'Failed to extract {partition} using 7z. Trying to mount.')
+                    os.mkdir(f'{out}/{partition}_mount')
+                    if os.system(f'sudo mount -o loop {out}/{img} {out}/{partition}_mount') == 0:
+                        print(f'Successfully mounted {partition}')
+                        os.system(f'sudo cp -rf {out}/{partition}_mount/* {path}/{partition}')
+                        os.system(f'sudo umount {out}/{partition}_mount/')
+                        os.system(f'sudo chown -R $(whoami) {path}/{partition}/')
+                        os.rmdir(f'{out}/{partition}_mount')
+                    else:
+                         os.rmdir(f'{out}/{partition}_mount')
+                         print(f'Failed to mount {partition}')
+                         continue
+
                 print(f'Extracted {partition} to {path}/{partition}.')
                 print()
             else:
