@@ -77,6 +77,8 @@ def extract(partitions):
 
                 os.mkdir(f'{path}/{partition}')
                 if os.system(f'7z x {out}/{img} -o{path}/{partition} > /dev/null') != 0:
+                    shutil.rmtree(f'{path}/{partition}')
+                    os.mkdir(f'{path}/{partition}')
                     print(f'Failed to extract {partition} using 7z. Trying to mount.')
                     os.mkdir(f'{out}/{partition}_mount')
                     if os.system(f'sudo mount -o loop {out}/{img} {out}/{partition}_mount') == 0:
