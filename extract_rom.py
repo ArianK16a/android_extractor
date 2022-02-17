@@ -31,11 +31,11 @@ def extract(partitions):
     sparse = True
 
     with tempfile.TemporaryDirectory() as out, zipfile.ZipFile(original_package, 'r') as package:
-        print(f'Unpacking {original_package} temporary.')
+        print(f'Unpacking {original_package}')
         print()
         package.extractall(out)
         for i in pathlib.Path(out).rglob('*.zip'):
-            print(f'Unpacking {i} temporary.')
+            print(f'Unpacking {i}')
             zipfile.ZipFile(i).extractall(out)
         if "payload.bin" in os.listdir(out):
             extract_android_ota_payload.main(f'{out}/payload.bin', f'{out}')
@@ -79,7 +79,7 @@ def extract(partitions):
                 if os.system(f'7z x {out}/{img} -o{path}/{partition} > /dev/null') != 0:
                     shutil.rmtree(f'{path}/{partition}')
                     os.mkdir(f'{path}/{partition}')
-                    print(f'Failed to extract {partition} using 7z. Trying to mount.')
+                    print(f'Failed to extract {partition} using 7z. Trying to mount')
                     os.mkdir(f'{out}/{partition}_mount')
                     if os.system(f'sudo mount -o loop {out}/{img} {out}/{partition}_mount') == 0:
                         print(f'Successfully mounted {partition}')
@@ -92,7 +92,7 @@ def extract(partitions):
                          print(f'Failed to mount {partition}')
                          continue
 
-                print(f'Extracted {partition} to {path}/{partition}.')
+                print(f'Extracted {partition} to {path}/{partition}')
                 print()
             else:
                 print(f'Can not get {partition}.img out of {original_package}')
