@@ -1,0 +1,25 @@
+From 96ac6fb066b3653cc83213f0a48f68076839ddf3 Mon Sep 17 00:00:00 2001
+From: Arian <arian.kulmer@web.de>
+Date: Mon, 27 Dec 2021 12:22:47 +0000
+Subject: [PATCH] Update include for use as utils module
+
+---
+ extract_android_ota_payload.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/extract_android_ota_payload.py b/extract_android_ota_payload.py
+index 8844715..051df71 100644
+--- a/extract_android_ota_payload.py
++++ b/extract_android_ota_payload.py
+@@ -10,7 +10,7 @@ import sys
+ import zipfile
+ 
+ # from https://android.googlesource.com/platform/system/update_engine/+/refs/heads/master/scripts/update_payload/
+-import update_metadata_pb2
++from utils.extract_android_ota_payload import update_metadata_pb2
+ 
+ PROGRAMS = [ 'bzcat', 'xzcat' ]
+ 
+-- 
+2.34.1
+
