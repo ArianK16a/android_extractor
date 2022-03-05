@@ -1,6 +1,6 @@
 ### First usage ###
 ```
-git submodule update --recursive
+git submodule update --recursive --init
 ./apply_patch.sh
 ```
 
