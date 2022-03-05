@@ -1,5 +1,6 @@
 ### First usage ###
 ```
+pip3 install protobuf
 git submodule update --recursive --init
 ./apply_patch.sh
 ```
